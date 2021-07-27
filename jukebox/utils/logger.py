@@ -14,7 +14,7 @@ def get_range(x):
     else:
         return x
 
-def init_logging(hps, local_rank, rank):
+def init_logging(hps, local_rank, rank, model):
     logdir = f"{hps.local_logdir}/{hps.name}"
     if local_rank == 0:
         if not os.path.exists(logdir):
@@ -25,6 +25,7 @@ def init_logging(hps, local_rank, rank):
     logger = Logger(logdir, rank)
     metrics = Metrics()
     logger.add_text('hps', str(hps))
+    logger.add_graph(model, input_to_model=None, verbose=True)  # ネットワーク記録用に追加
     return logger, metrics
 
 def get_name(hps):
@@ -90,6 +91,18 @@ class Logger:
     def add_text(self, tag, text):
         if self.rank == 0:
             self.sw.add_text(tag, text, self.iters)
+
+
+
+    def add_graph(self, model, input_to_model=None, verbose=False):
+        """
+        (追加)
+        モデルネットワークのログを記録するメソッド
+        """
+        if self.rank == 0:
+            self.sw.add_graph(model, input_to_model=input_to_model, verbose=verbose)
+
+
 
     def add_audios(self, tag, auds, sample_rate=22050, max_len=None, max_log=8):
         if self.rank == 0:

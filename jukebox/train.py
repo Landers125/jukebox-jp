@@ -319,7 +319,7 @@ def run(hps="teeny", port=29500, **kwargs):
     ema = get_ema(model, hps)
     distributed_model = get_ddp(model, hps)
 
-    logger, metrics = init_logging(hps, local_rank, rank)
+    logger, metrics = init_logging(hps, local_rank, rank, model)  # modelを追加
     logger.iters = model.step
 
     # Run training, eval, sample
