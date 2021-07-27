@@ -226,6 +226,8 @@ def train(model, orig_model, opt, shd, scalar, ema, logger, metrics, data_proces
         else:
             forw_kwargs = dict(loss_fn=hps.loss_fn, hps=hps)
 
+        logger.add_graph(model, input_to_model=x, verbose=True)  # add for logger
+
         # Forward
         x_out, loss, _metrics = model(x, **forw_kwargs)
 
@@ -319,7 +321,7 @@ def run(hps="teeny", port=29500, **kwargs):
     ema = get_ema(model, hps)
     distributed_model = get_ddp(model, hps)
 
-    logger, metrics = init_logging(hps, local_rank, rank, model)  # modelを追加
+    logger, metrics = init_logging(hps, local_rank, rank)
     logger.iters = model.step
 
     # Run training, eval, sample

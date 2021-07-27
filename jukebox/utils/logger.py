@@ -14,7 +14,7 @@ def get_range(x):
     else:
         return x
 
-def init_logging(hps, local_rank, rank, model):
+def init_logging(hps, local_rank, rank):
     logdir = f"{hps.local_logdir}/{hps.name}"
     if local_rank == 0:
         if not os.path.exists(logdir):
@@ -25,7 +25,6 @@ def init_logging(hps, local_rank, rank, model):
     logger = Logger(logdir, rank)
     metrics = Metrics()
     logger.add_text('hps', str(hps))
-    logger.add_graph(model, input_to_model=None, verbose=True)  # ネットワーク記録用に追加
     return logger, metrics
 
 def get_name(hps):
