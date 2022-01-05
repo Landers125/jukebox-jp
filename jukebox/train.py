@@ -5,6 +5,7 @@ Then from maestros
 """
 import sys
 
+sys.path.append('.//jukebox')
 import warnings
 import numpy as np
 import torch as t
