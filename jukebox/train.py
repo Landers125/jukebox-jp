@@ -4,7 +4,7 @@ First try for random inputs
 Then from maestros
 """
 import sys
-import fire
+
 import warnings
 import numpy as np
 import torch as t
